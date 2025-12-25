@@ -55,7 +55,7 @@ graph TD
     style IRIS stroke:#00aa00,stroke-width:3px,fill:none
     style SH stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
     style TI stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
-
+```
 
 I had an old 2016 Mac Mini, so I decided to use it as a lab environment.  
 It has a 512 GB SSD and 8 GB of RAM, which is more than enough to start.  

@@ -16,19 +16,15 @@
 
 ```mermaid
 graph TD
-    subgraph "Physical Host: Mac Mini 2016"
-        P[Proxmox VE]
-    end
+    P[Proxmox VE<br/><small>Physical Host: Mac Mini 2016</small>]
 
-    subgraph "Virtual Machines on Proxmox"
-        W["Windows 10/11 Endpoint<br>Wazuh Agent<br>Phishing simulation"]
-        K["Kali Linux<br>Offensive tools<br>Optional for simulation"]
-        C["MITRE CALDERA<br>Adversary emulation<br>Detection validation"]
-        WAZ["Wazuh Manager<br>SIEM / XDR<br>Generates alerts"]
-        IRIS["DFIR-IRIS<br>Case management<br>Incident response"]
-        SH["Shuffle - Phase 2<br>SOAR - Automation<br>Enrichment"]
-        TI["OpenCTI or MISP - Phase 3<br>Threat intelligence<br>IOCs"]
-    end
+    W["Windows 10/11 Endpoint<br>Wazuh Agent<br>Phishing simulation"]
+    K["Kali Linux<br>Offensive tools<br>Optional for simulation"]
+    C["MITRE CALDERA<br>Adversary emulation<br>Detection validation"]
+    WAZ["Wazuh Manager<br>SIEM / XDR<br>Generates alerts"]
+    IRIS["DFIR-IRIS<br>Case management<br>Incident response"]
+    SH["Shuffle - Phase 2<br>SOAR - Automation<br>Enrichment"]
+    TI["OpenCTI or MISP - Phase 3<br>Threat intelligence<br>IOCs"]
 
     P --> W
     P --> K

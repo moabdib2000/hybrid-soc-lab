@@ -2,11 +2,59 @@
 
 **Hybrid SOC Lab – Phishing + Incident Response (L1 Focus)**
 
+
+
 [🇬🇧 English](#english) | [🇪🇸 Español](#español)
+
+
 
 ## 🇬🇧 English
 
 ### Hybrid SOC Lab – Phishing and Incident Response (L1 Focus)
+
+### General architecture
+
+```mermaid
+graph TD
+    subgraph "Physical Host: Mac Mini 2016"
+        P[Proxmox VE]
+    end
+
+    subgraph "Virtual Machines on Proxmox"
+        W[Windows 10/11 Endpoint<br/>Wazuh Agent<br/>Phishing simulation]
+        K[Kali Linux<br/>Offensive tools<br/>(Optional for simulation)]
+        C[MITRE CALDERA<br/>Adversary emulation<br/>Detection validation]
+        WAZ[Wazuh Manager<br/>SIEM / XDR<br/>Generates alerts]
+        IRIS[DFIR-IRIS<br/>Case management<br/>Incident response]
+        SH[Shuffle (Phase 2)<br/>SOAR - Automation<br/>Enrichment]
+        TI[OpenCTI or MISP (Phase 3)<br/>Threat intelligence<br/>IOCs]
+    end
+
+    P --> W
+    P --> K
+    P --> C
+    P --> WAZ
+    P --> IRIS
+    P --> SH
+    P --> TI
+
+    W -->|Logs and events| WAZ
+    K -->|Manual attacks| W
+    C -->|Malicious behavior| W
+    WAZ -->|Alerts| IRIS
+    WAZ -->|Alerts| SH
+    SH -->|Automated workflows| IRIS
+    SH -->|IOC queries| TI
+    TI -->|Threat intel context| IRIS
+
+    style P stroke:#666,stroke-width:3px,fill:none
+    style W stroke:#0066cc,stroke-width:3px,fill:none
+    style K stroke:#cc0000,stroke-width:3px,fill:none
+    style C stroke:#cc0000,stroke-width:3px,fill:none
+    style WAZ stroke:#00aa00,stroke-width:3px,fill:none
+    style IRIS stroke:#00aa00,stroke-width:3px,fill:none
+    style SH stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
+    style TI stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
 
 I had an old 2016 Mac Mini, so I decided to use it as a lab environment.  
 It has a 512 GB SSD and 8 GB of RAM, which is more than enough to start.  
@@ -139,6 +187,50 @@ All simulations are performed in a controlled environment, at my house. If the M
 ## 🇪🇸 Español
 
 ### Hybrid SOC Lab – Phishing e Incidentes de Seguridad (Enfoque L1)
+
+### General architecture / Arquitectura general
+
+```mermaid
+graph TD
+    subgraph "Host Físico: Mac Mini 2016"
+        P[Proxmox VE]
+    end
+
+    subgraph "Máquinas Virtuales en Proxmox"
+        W[Windows 10/11 Endpoint<br/>Wazuh Agent<br/>Simulación de phishing]
+        K[Kali Linux<br/>Herramientas ofensivas<br/>(Opcional para simulación)]
+        C[MITRE CALDERA<br/>Simulación adversario<br/>Validación detecciones]
+        WAZ[Wazuh Manager<br/>SIEM / XDR<br/>Genera alertas]
+        IRIS[DFIR-IRIS<br/>Gestión de casos<br/>Respuesta a incidentes]
+        SH[Shuffle (Fase 2)<br/>SOAR - Automatización<br/>Enriquecimiento]
+        TI[OpenCTI o MISP (Fase 3)<br/>Inteligencia de amenazas<br/>IOCs]
+    end
+
+    P --> W
+    P --> K
+    P --> C
+    P --> WAZ
+    P --> IRIS
+    P --> SH
+    P --> TI
+
+    W -->|Logs y eventos| WAZ
+    K -->|Ataques manuales| W
+    C -->|Comportamiento malicioso| W
+    WAZ -->|Alertas| IRIS
+    WAZ -->|Alertas| SH
+    SH -->|Workflows automáticos| IRIS
+    SH -->|Consultas IOCs| TI
+    TI -->|Contexto TI| IRIS
+
+    style P stroke:#666,stroke-width:3px,fill:none
+    style W stroke:#0066cc,stroke-width:3px,fill:none
+    style K stroke:#cc0000,stroke-width:3px,fill:none
+    style C stroke:#cc0000,stroke-width:3px,fill:none
+    style WAZ stroke:#00aa00,stroke-width:3px,fill:none
+    style IRIS stroke:#00aa00,stroke-width:3px,fill:none
+    style SH stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
+    style TI stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
 
 Tenía un Mac Mini de 2016 sin uso, así que decidí aprovecharlo como entorno de laboratorio.  
 Cuenta con 512 GB de SSD y 8 GB de RAM, suficiente para empezar.  

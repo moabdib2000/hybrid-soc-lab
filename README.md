@@ -94,7 +94,7 @@ The lab is built on top of Proxmox VE, which is used to host and isolate the dif
 ### General architecture
 
 ```mermaid
-graph TD
+graph RL
     P[Proxmox VE<br/><small>Physical Host: Mac Mini 2016<br/>512 GB SSD · 8 GB RAM</small>]
 
     W["Windows 10/11 Endpoint<br/>Wazuh Agent"]

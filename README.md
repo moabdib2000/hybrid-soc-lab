@@ -15,7 +15,7 @@
 ### General architecture
 
 ```mermaid
-graph LR
+graph TD
     P[Proxmox VE<br/><small>Physical Host: Mac Mini 2016</small>]
 
     W["Windows 10/11 Endpoint<br>Wazuh Agent<br>Phishing simulation"]

@@ -14,10 +14,6 @@
 
 ### General architecture
 
-### General architecture
-
-### General architecture
-
 ```mermaid
 graph TD
     subgraph "Physical Host: Mac Mini 2016"
@@ -51,7 +47,6 @@ graph TD
     SH -->|IOC queries| TI
     TI -->|Threat intel context| IRIS
 
-    %% Nodos sin fondo (transparente)
     style P stroke:#666,stroke-width:3px,fill:none
     style W stroke:#0066cc,stroke-width:3px,fill:none
     style K stroke:#cc0000,stroke-width:3px,fill:none
@@ -60,13 +55,6 @@ graph TD
     style IRIS stroke:#00aa00,stroke-width:3px,fill:none
     style SH stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
     style TI stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
-
-    %% Bordes de los subgraphs (las "zonas")
-    classDef physicalHost fill:none,stroke:#999,stroke-width:2px,stroke-dasharray: 5 5
-    classDef vmCluster fill:none,stroke:#444,stroke-width:2px
-
-    class "Physical Host: Mac Mini 2016" physicalHost
-    class "Virtual Machines on Proxmox" vmCluster
 
 ```
 

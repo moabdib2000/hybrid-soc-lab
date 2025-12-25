@@ -198,23 +198,23 @@ All simulations are performed in a controlled environment, at my house. If the M
 
 ### Hybrid SOC Lab – Phishing e Incidentes de Seguridad (Enfoque L1)
 
-### General architecture / Arquitectura general
+### Arquitectura general
 
 ```mermaid
 graph TD
-    subgraph "Host Físico: Mac Mini 2016"
-        P[Proxmox VE]
-    end
+    P[Proxmox VE<br/><small>Host físico: Mac Mini 2016</small>]
 
-    subgraph "Máquinas Virtuales en Proxmox"
-        W[Windows 10/11 Endpoint<br/>Wazuh Agent<br/>Simulación de phishing]
-        K[Kali Linux<br/>Herramientas ofensivas<br/>(Opcional para simulación)]
-        C[MITRE CALDERA<br/>Simulación adversario<br/>Validación detecciones]
-        WAZ[Wazuh Manager<br/>SIEM / XDR<br/>Genera alertas]
-        IRIS[DFIR-IRIS<br/>Gestión de casos<br/>Respuesta a incidentes]
-        SH[Shuffle (Fase 2)<br/>SOAR - Automatización<br/>Enriquecimiento]
-        TI[OpenCTI o MISP (Fase 3)<br/>Inteligencia de amenazas<br/>IOCs]
-    end
+    W["Endpoint Windows 10/11<br>Agente Wazuh<br>Simulación de phishing"]
+    K["Kali Linux<br>Herramientas ofensivas<br>Opcional para simulación"]
+    C["MITRE CALDERA<br>Emulación de adversario<br>Validación de detecciones"]
+    WAZ["Wazuh Manager<br>SIEM / XDR<br>Genera alertas"]
+    IRIS["DFIR-IRIS<br>Gestión de casos<br>Respuesta a incidentes"]
+    SH["Shuffle - Fase 2<br>SOAR - Automatización<br>Enriquecimiento"]
+    TI["OpenCTI o MISP - Fase 3<br>Inteligencia de amenazas<br>IOCs"]
+
+    CLOSED["Alerta cerrada<br>Falso positivo<br>Sin escalado"]
+    ESCALATED["Escalada a L2<br>Amenaza real"]
+    REPORT["Incidente cerrado<br>Reporte final generado"]
 
     P --> W
     P --> K
@@ -231,7 +231,11 @@ graph TD
     WAZ -->|Alertas| SH
     SH -->|Workflows automáticos| IRIS
     SH -->|Consultas IOCs| TI
-    TI -->|Contexto TI| IRIS
+    TI -->|Contexto de inteligencia| IRIS
+
+    IRIS -->|Decisión de triage| CLOSED
+    IRIS -->|Decisión de triage| ESCALATED
+    IRIS -->|Tras resolución| REPORT
 
     style P stroke:#666,stroke-width:3px,fill:none
     style W stroke:#0066cc,stroke-width:3px,fill:none
@@ -241,6 +245,12 @@ graph TD
     style IRIS stroke:#00aa00,stroke-width:3px,fill:none
     style SH stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
     style TI stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
+    style CLOSED stroke:#999,stroke-width:2px,fill:none
+    style ESCALATED stroke:#ff6600,stroke-width:3px,fill:none
+    style REPORT stroke:#00aa00,stroke-width:3px,fill:none
+
+```
+
 
 Tenía un Mac Mini de 2016 sin uso, así que decidí aprovecharlo como entorno de laboratorio.  
 Cuenta con 512 GB de SSD y 8 GB de RAM, suficiente para empezar.  

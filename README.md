@@ -310,6 +310,38 @@ Con este proyecto quiero:
 ### Arquitectura general
 El laboratorio se construye sobre Proxmox VE, que se utiliza para alojar y aislar los distintos componentes mediante máquinas virtuales.
 
+```mermaid
+graph RL
+    P[Proxmox VE<br/><small>Physical Host: Mac Mini 2016<br/>512 GB SSD · 8 GB RAM</small>]
+
+    W["Windows 10/11 Endpoint<br/>Wazuh Agent"]
+    K["Kali Linux<br/>Herramientas ofensivas"]
+    C["MITRE CALDERA<br/>Emulación adversario"]
+    WAZ["Wazuh Manager<br/>SIEM / XDR"]
+    IRIS["DFIR-IRIS<br/>Gestión de casos"]
+    SH["Shuffle<br/>SOAR - Fase 2"]
+    TI["OpenCTI or MISP<br/>Inteligencia amenazas - Phase 3"]
+
+    P --> W
+    P --> K
+    P --> C
+    P --> WAZ
+    P --> IRIS
+    P --> SH
+    P --> TI
+
+    style P stroke:#666,stroke-width:4px,fill:none
+    style W stroke:#0066cc,stroke-width:3px,fill:none
+    style K stroke:#cc0000,stroke-width:3px,fill:none
+    style C stroke:#cc0000,stroke-width:3px,fill:none
+    style WAZ stroke:#00aa00,stroke-width:3px,fill:none
+    style IRIS stroke:#00aa00,stroke-width:3px,fill:none
+    style SH stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
+    style TI stroke:#00aa00,stroke-width:3px,stroke-dasharray: 5 5,fill:none
+
+```
+
+
 #### Por qué Proxmox
 Proxmox se utiliza para:
 

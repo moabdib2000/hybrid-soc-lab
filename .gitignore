@@ -1,0 +1,16 @@
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Logs y archivos temporales
+*.log
+
+# ISOs y archivos grandes (para evitar subirlos por accidente)
+*.iso
+*.ova
+*.qcow2

@@ -6,7 +6,45 @@
 
 [🇬🇧 English](#english) | [🇪🇸 Español](#español)
 
+### Phishing incident sequence diagram
 
+```mermaid
+sequenceDiagram
+    participant User as User (Windows Endpoint)
+    participant Agent as Wazuh Agent
+    participant Wazuh as Wazuh Manager
+    participant IRIS as DFIR-IRIS
+    participant Analyst as SOC Analyst L1
+    participant Shuffle as Shuffle (Phase 2 - Optional)
+    participant TI as OpenCTI/MISP (Phase 3 - Optional)
+
+    User->>User: Clicks phishing link / Executes malicious file
+    User->>Agent: Suspicious activity (network, process, file)
+    Agent->>Wazuh: Sends logs/events
+    Wazuh->>Wazuh: Correlates rules → Generates alert
+    Wazuh-->>IRIS: Alert forwarded (webhook/integration)
+    opt Automated enrichment (future)
+        Wazuh->>Shuffle: Sends alert
+        Shuffle->>TI: IOC lookup (hash, URL, IP)
+        TI-->>Shuffle: Threat intel context
+        Shuffle-->>IRIS: Creates/enriches case automatically
+    end
+    IRIS->>Analyst: New case/alert appears
+    Analyst->>IRIS: Reviews evidence, timeline, IOCs
+    Analyst->>IRIS: Adds notes and tags
+
+    alt False positive
+        Analyst->>IRIS: Closes case (no escalation)
+        IRIS->>Analyst: Case closed
+    else Real threat
+        Analyst->>IRIS: Escalates to L2 / Adds actions
+        IRIS->>Analyst: Case escalated
+    end
+
+    Analyst->>IRIS: Generates final report
+    Note right of Analyst: Learning focus: triage, decision-making,<br/>documentation and workflow
+
+```
 
 ## 🇬🇧 English
 

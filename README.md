@@ -4,7 +4,7 @@
 
 [🇬🇧 English](#english) | [🇪🇸 Español](#español)
 
-## English
+## 🇬🇧 English
 
 ### Hybrid SOC Lab – Phishing and Incident Response (L1 Focus)
 
@@ -134,9 +134,9 @@ The lab is being built and documented gradually.
 
 ### Disclaimer
 This project is for learning and educational purposes only.  
-All simulations are performed in a controlled environment.
+All simulations are performed in a controlled environment, at my house. If the Mac Mini explodes, we'll let you know here 😄
 
-## Español
+## 🇪🇸 Español
 
 ### Hybrid SOC Lab – Phishing e Incidentes de Seguridad (Enfoque L1)
 
@@ -266,4 +266,4 @@ El laboratorio se construye y documenta de forma progresiva.
 
 ### Aviso
 Este proyecto es exclusivamente formativo.  
-Todas las simulaciones se realizan en un entorno controlado.
+Todas las simulaciones se realizan en un entorno controlado, en mi casa, si explota el macmini avisaremos por aqui 😄 

@@ -67,11 +67,13 @@ Proxmox is used to:
 - **DFIR-IRIS**  
   Incident response and case management platform
 
-- **Shuffle (SOAR)**  
-  Used for simple automation and enrichment workflows
+# ----- ADVANCED PHASE -----
 
-- *(Optional – advanced phase)* OpenCTI or MISP  
-  Used to add threat intelligence context
+    - **Shuffle (SOAR) (Optional – advanced phase) **  
+      Used for simple automation and enrichment workflows
+
+    - *(Optional – advanced phase)* OpenCTI or MISP  
+      Used to add threat intelligence context
 
 ---
 

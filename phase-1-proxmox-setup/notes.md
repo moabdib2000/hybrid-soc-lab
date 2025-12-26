@@ -70,5 +70,5 @@ primero instalamos sudo porque no está en proxmox, ya me ha dado el problema al
   nano ~/.zshrc
   ```
 En la carpeta phase-0-proxmox-setup he dejado la configuracion de prueba para esto
-oh_my_zsh_configuration.sh
+oh_my_zsh_configuration.txt
 

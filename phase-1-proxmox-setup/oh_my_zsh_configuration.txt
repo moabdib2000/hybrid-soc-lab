@@ -1,0 +1,116 @@
+# Oh My Zsh Configuration
+export ZSH="$HOME/.oh-my-zsh"
+
+# TEMA (Kali usa "kali" o "agnoster" o "powerlevel10k")
+ZSH_THEME="agnoster"
+# ZSH_THEME="powerlevel10k/powerlevel10k"  # Más moderno
+# ZSH_THEME="kali"  # Si quieres exactamente Kali
+
+# PLUGINS (orden importante)
+plugins=(
+  git
+  sudo
+  command-not-found
+  common-aliases
+  copyfile
+  copypath
+  dirhistory
+  history
+  z
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  zsh-history-substring-search
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# ===== CONFIGURACIÓN DE AUTOSUGERENCIAS =====
+# Zsh-autosuggestions (sugerencias grises)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8a8a8a,bg=bold"
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+bindkey '^ ' autosuggest-accept  # Ctrl+Espacio para aceptar sugerencia
+bindkey '^[^M' autosuggest-execute  # Alt+Enter para ejecutar sugerencia
+
+# Zsh-syntax-highlighting (colores según validez)
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor root line)
+ZSH_HIGHLIGHT_STYLES[default]=none
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=green'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=green'
+ZSH_HIGHLIGHT_STYLES[function]='fg=green'
+ZSH_HIGHLIGHT_STYLES[command]='fg=green'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=green,underline'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=blue'
+ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green'
+ZSH_HIGHLIGHT_STYLES[path]='fg=cyan,underline'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=magenta'
+ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=blue'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=magenta'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=magenta'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=magenta'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[assign]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=blue'
+ZSH_HIGHLIGHT_STYLES[comment]='fg=black,bold'
+ZSH_HIGHLIGHT_STYLES[arg0]='fg=cyan'
+
+# Zsh-history-substring-search (buscar en historial con flechas)
+bindkey '^[[A' history-substring-search-up    # Flecha arriba
+bindkey '^[[B' history-substring-search-down  # Flecha abajo
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=green,fg=black,bold'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=black,bold'
+
+# ===== HISTORIAL MEJORADO (como Kali) =====
+HISTSIZE=100000
+SAVEHIST=100000
+HISTFILE=~/.zsh_history
+setopt HIST_IGNORE_ALL_DUPS  # Ignorar duplicados
+setopt HIST_FIND_NO_DUPS     # No mostrar duplicados en búsqueda
+setopt HIST_IGNORE_SPACE     # Ignorar comandos que empiezan con espacio
+setopt INC_APPEND_HISTORY    # Append en tiempo real
+setopt SHARE_HISTORY         # Compartir historial entre sesiones
+setopt HIST_REDUCE_BLANKS    # Eliminar espacios en blanco innecesarios
+setopt HIST_VERIFY           # Verificar antes de ejecutar
+
+# ===== AUTOCOMPLETADO AVANZADO =====
+autoload -U compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+zstyle ':completion:*:descriptions' format '%U%F{cyan}%d%f%u'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+# ===== ALIAS ÚTILES (como Kali) =====
+alias ll='ls -la'
+alias l='ls -l'
+alias la='ls -A'
+alias h='history'
+alias hg='history | grep'
+alias zshrc='nano ~/.zshrc'
+alias sz='source ~/.zshrc'
+alias update='sudo apt update && sudo apt upgrade -y'
+alias install='sudo apt install'
+alias remove='sudo apt remove'
+alias search='apt search'
+
+# ===== FUNCIÓN PARA KALI-LIKE =====
+kalicomplete() {
+  local cmd=$1
+  if [[ -n $cmd ]]; then
+    print -z $cmd
+  fi
+}

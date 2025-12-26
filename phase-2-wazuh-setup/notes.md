@@ -75,9 +75,18 @@ apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 # Habilitar y arrancar Docker
 systemctl enable --now docker
 
-# Descarga de archivos oficiales de Wazuh - en este caso a fecha de hoy es la 4.7 porque es la mas estable en un debian 11
-curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh
-curl -sO https://packages.wazuh.com/4.7/wazuh-install-files.yml
-bash ./wazuh-install.sh -a <---- da fallo porque me dice que debian no esta entre los sistemas recomendados 
+# --------------------- esto en el shell principal proxmox ------------------------------
+# Aplica el cambio
+sysctl -w vm.max_map_count=262144
+# Hazlo permanente
+echo "vm.max_map_count=262144" >> /etc/sysctl.conf
+# Verifica el cambio
+sysctl vm.max_map_count
+# --------------------- esto en el shell principal proxmox ------------------------------
 
-bash ./wazuh-install.sh -a -i # esto pone un ignore a las advertencias, venga tira !!!
+
+# Preparamos todo para Wazuh para docker
+git clone https://github.com/wazuh/wazuh-docker.git -b v4.9.2 # si no da fallo intentando bajar la 5 y luego no se monta bien 
+
+cd ~/wazuh-docker/single-node
+docker compose up -d

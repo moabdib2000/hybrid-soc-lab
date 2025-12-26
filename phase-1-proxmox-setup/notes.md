@@ -72,3 +72,5 @@ primero instalamos sudo porque no está en proxmox, ya me ha dado el problema al
 En la carpeta phase-0-proxmox-setup he dejado la configuracion de prueba para esto
 oh_my_zsh_configuration.txt
 
+# OPCIONAL Instalar Tailscale para acceso remoto mediante VPN a proxmox y toda la subred
+

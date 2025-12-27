@@ -1,31 +1,77 @@
 # Fase 2: Instalación del Wazuh Manager
 
+# --------------------- esto en el shell principal proxmox ------------------------------
+# pulsamos proxmox y luego shell para entrar en el shell, esto hace falta porque wazuh lo necesita
+# Aplica el cambio
+sysctl -w vm.max_map_count=262144
+# Hazlo permanente
+echo "vm.max_map_count=262144" >> /etc/sysctl.conf
+# Verifica el cambio
+sysctl vm.max_map_count
+# Ajustar swappiness para mejor rendimiento
+echo "vm.swappiness=1" >> /etc/sysctl.conf
+
+
+# Descargar la OVA (si no lo has hecho)
+cd /var/lib/vz/template/iso/
+wget https://packages.wazuh.com/4.x/vm/wazuh-4.14.1.ova
+
+# Extraer la OVA (es un archivo TAR)
+tar -xvf wazuh-4.14.1.ova
+
+# Instalar herramientas de conversión si no están
+apt update
+apt install qemu-utils -y
+# da un error vamos a ver si seguimos el proceso
+
+# Convertir VMDK a qcow2 (más eficiente) --- atencion a la version, yo he descargado wazuh 4.14.1, revisad el nombre del archivo 
+qemu-img convert -f vmdk -O qcow2 wazuh-4.14.1-disk-1.vmdk wazuh-4.14.1.qcow2
+
+# Verificar la conversión
+qemu-img info wazuh-4.14.1.qcow2
+
+# Crear VM con ID 110 (ajusta según tus necesidades)
+qm create 110 --name "Wazuh-4.14.1" --memory 4096 --cores 2 --net0 virtio,bridge=vmbr0
+
+# Importar disco convertido
+qm importdisk 110 wazuh-4.14.1.qcow2 local-lvm
+
+# Configurar disco importado
+qm set 110 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-110-disk-0
+
+# Configurar boot
+qm set 110 --boot c --bootdisk scsi0
+
+# Configurar pantalla (importante para OVA)
+qm set 110 --serial0 socket --vga serial0
+
+# Configurar memoria ballooning (para optimizar RAM)
+qm set 110 --balloon 2048
+
+# Opcional: Añadir CD-ROM para cloud-init si necesitas
+qm set 110 --ide2 local-lvm:cloudinit
+
+# Ver configuración
+qm config 110
+
+
+
+
+
+# --------------------- esto en el shell principal proxmox ------------------------------
+
+
+
+
+
+
 Download the virtual appliance (OVA).
+https://packages.wazuh.com/4.x/vm/wazuh-4.14.1.ova
+
+
+
 https://documentation.wazuh.com/current/installation-guide/wazuh-server/step-by-step.html
 at update && apt upgrade -y 
-Install the following packages if missing.
-apt-get install gnupg apt-transport-https
-apt-get install curl <--- primero
-Install the GPG key.
-curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
-Add the repository.
-echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
-Update the packages information
-apt-get update
-Install the Wazuh manager package
-apt-get -y install wazuh-manager
-Install the Filebeat package.
-apt-get -y install filebeat
-Download the preconfigured Filebeat configuration file.
-curl -so /etc/filebeat/filebeat.yml https://packages.wazuh.com/4.14/tpl/wazuh/filebeat/filebeat.yml
-Edit the /etc/filebeat/filebeat.yml configuration file and replace the following value:
-hosts: The list of Wazuh indexer nodes to connect to. You can use either IP addresses or hostnames. By default, the host is set to localhost hosts: ["192.168.1.100:9200"]. Replace your Wazuh indexer IP address accordingly.
-Create a Filebeat keystore to securely store authentication credentials.
-filebeat keystore create
-Add the default username and password admin:admin to the secrets keystore.
-echo admin | filebeat keystore add username --stdin --force
-echo admin | filebeat keystore add password --stdin --force
-Download the alerts template for the Wazuh indexer.
 
 
 ## Objetivo
@@ -54,7 +100,7 @@ asignamos nombre, contraseas y en las pestañas está el resto de lo que debemos
 - **Hostname**: `wazuh-manager`
 - **Template**: Debian 11 
 - **Recursos asignados**:
-  - vCPU: 2 núcleos
+  - vCPU: 3 núcleos
   - RAM: 3072 MB (3 GB)
   - Swap: 1024 MB
   - Disco: 50 GB
@@ -74,8 +120,6 @@ luego cuando haya pasado un momento y vemos que ha arrancado pulsamos en >_ Cons
 arranca como y nos pide user "root" y password que hemos metido al crear el contenedor ...
 nos abrirá un proxmox console, una ventana con una consola para trabajar ....
 
-
-
 ## Método de instalación elegido
 - **All-in-One con Docker** (recomendado por Wazuh para laboratorios y entornos pequeños).
 - Ventajas: instalación rápida, todo integrado (manager, indexer, dashboard), bajo mantenimiento.
@@ -85,29 +129,40 @@ nos abrirá un proxmox console, una ventana con una consola para trabajar ....
 ```bash
 # Actualización del sistema
 apt update && apt upgrade -y
+apt install curl apt-transport-https gnupg2 -y
 
-# Instalación de dependencias y Docker, instalamos docker porque el instalador de wazuh lo va a necesitar para contener cada parte de wazuh aislada en contenedores 
-apt install sudo curl gnupg lsb-release ca-certificates -y
-curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bullseye stable" > /etc/apt/sources.list.d/docker.list
-apt update
-apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+# Descargar y ejecutar script de instalación
+curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh
+curl -sO https://packages.wazuh.com/4.7/config.yml
 
-# Habilitar y arrancar Docker
-systemctl enable --now docker
+# EDITAR config.yml ANTES de ejecutar (IMPORTANTE para LXC)
+nano config.yml
 
-# --------------------- esto en el shell principal proxmox ------------------------------
-# Aplica el cambio
-sysctl -w vm.max_map_count=262144
-# Hazlo permanente
-echo "vm.max_map_count=262144" >> /etc/sysctl.conf
-# Verifica el cambio
-sysctl vm.max_map_count
-# --------------------- esto en el shell principal proxmox ------------------------------
+# BEGIN copiamos esto en config.yml y eliminamos lo que tuviera ----------------
 
+nodes:
+  indexer:
+    - name: node-1
+      ip: 127.0.0.1
+  server:
+    - name: wazuh-1
+      ip: 127.0.0.1
+  dashboard:
+    - name: dashboard
+      ip: 127.0.0.1
 
-# Preparamos todo para Wazuh para docker
-git clone https://github.com/wazuh/wazuh-docker.git -b v4.9.2 # si no da fallo intentando bajar la 5 y luego no se monta bien 
+# REDUCIR memoria para tu hardware limitado:
+wazuh_indexer_heap_size: 1g  # En lugar de 2g
+wazuh_memory: 1g  # Para el manager
 
-cd ~/wazuh-docker/single-node
-docker compose up -d
+# END copiamos esto en config.yml y eliminamos lo que tuviera ----------------
+
+#-i para ignorar que no somos el sistema de su agrado :D 
+bash wazuh-install.sh --generate-config-files -i 
+bash wazuh-install.sh --wazuh-indexer node-1 -i
+bash wazuh-install.sh --start-cluster -i 
+bash wazuh-install.sh --wazuh-server wazuh-1 -i 
+bash wazuh-install.sh --wazuh-dashboard dashboard -i
+
+# O en un solo comando (menos control):
+bash wazuh-install.sh --all-in-one

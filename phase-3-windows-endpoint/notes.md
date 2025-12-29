@@ -41,3 +41,22 @@ Además, se instalará el agente Wazuh para que envíe logs al futuro Wazuh Mana
   Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.8.2-1.msi -OutFile wazuh-agent.msi
   msiexec /i wazuh-agent.msi /q WAZUH_MANAGER="IP_FUTURA_DEL_MANAGER"
   NET start WazuhSvc
+
+
+  -----------------------------------------------
+# 1. Crear directorio de ISOs si no existe
+mkdir -p /var/lib/vz/template/iso
+
+# 2. Descargar Windows 11 Enterprise Evaluation (24H2) desde Microsoft
+cd /var/lib/vz/template/iso
+
+vamos a https://www.microsoft.com/en-us/evalcenter/download-windows-11-enterprise
+y seleccionamos la ISO de nuestro idioma que no sea LTSC
+y copiamos la direccion de enlace
+
+problema : como pasamos la ISO a proxmox ?¿? 
+en local proxmox --- buscamos ISO images --- Download from URL
+ponemos en la URL el enlace copiado 
+ponemos un mobre WIN11.iso o lo que quieras, eso ya se queda en las isos instalables
+ahora  esperamos a que se descargue :D 
+

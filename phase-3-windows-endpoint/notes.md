@@ -60,3 +60,42 @@ ponemos en la URL el enlace copiado
 ponemos un mobre WIN11.iso o lo que quieras, eso ya se queda en las isos instalables
 ahora  esperamos a que se descargue :D 
 
+En la misma ventana de "ISO Images":
+Click en "Download from URL" otra vez
+URL: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+Nombre: virtio-win.iso
+Click "Download"
+
+# vale ahora vamos a preparar el VM, en el shell de promox metemos esto, se puede hacer en el modo grafico de proxmox, pero por aqui vamos a tardar menos 
+
+VM_ID="120"
+VM_NAME="win11-endpoint"
+STORAGE="local-lvm"
+
+# Crear VM (si no existe)
+qm create $VM_ID --name "$VM_NAME" --memory 3072 --cores 2 --net0 virtio,bridge=vmbr0
+
+# Configurar UEFI con formato raw
+qm set $VM_ID --machine q35 --bios ovmf
+qm set $VM_ID --efidisk0 $STORAGE:4,format=raw,efitype=4m
+
+# Disco principal (qcow2 sí funciona aquí)
+qm set $VM_ID --scsi0 local-lvm:60,format=raw
+
+# montamos las ISOs en nuestros CD-rom 😂  
+qm set 120 --ide2 local:iso/win11.iso,media=cdrom
+qm set 120 --ide3 local:iso/virtio-win.iso,media=cdrom
+
+# configurar desde la interfaz web:
+Ve a la VM 120 en Proxmox web
+Click en "Options"
+Click en "Boot Order"
+Click "Edit" movemos el orden pulsando en las 3 rallitas, ponemos primero CD, y luego SCSI, y lo ponemos en "enabled"
+Click en "Ok"
+
+
+# -------vamos por aqui ---------
+Inicia la VM con esta configuración.
+Instala Windows 11 desde el primer ISO.
+Cuando Windows pida drivers de almacenamiento, monta el ISO de VirtIO (tercera opción) sin reiniciar y selecciona la carpeta de drivers adecuada.
+Una vez finalizada la instalación, apaga la VM, desmonta el ISO de Windows 11 (o deshabilítalo en el orden de arranque) y reinicia para que arranque desde el disco duro.

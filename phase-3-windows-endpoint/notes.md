@@ -55,7 +55,7 @@ y seleccionamos la ISO de nuestro idioma que no sea LTSC
 y copiamos la direccion de enlace
 
 problema : como pasamos la ISO a proxmox ?¿? 
-en local proxmox --- buscamos ISO images --- Download from URL
+en local proxmox --- buscamos ISO images --- Download from URL - nombramos como "win11.iso"
 ponemos en la URL el enlace copiado 
 ponemos un mobre WIN11.iso o lo que quieras, eso ya se queda en las isos instalables
 ahora  esperamos a que se descargue :D 
@@ -68,23 +68,38 @@ Click "Download"
 
 # vale ahora vamos a preparar el VM, en el shell de promox metemos esto, se puede hacer en el modo grafico de proxmox, pero por aqui vamos a tardar menos 
 
-VM_ID="120"
-VM_NAME="win11-endpoint"
-STORAGE="local-lvm"
 
-# Crear VM (si no existe)
-qm create $VM_ID --name "$VM_NAME" --memory 3072 --cores 2 --net0 virtio,bridge=vmbr0
+# Paso 1: Crear VM con configuración base
+qm create 120 \
+  --name "win11-endpoint" \
+  --ostype win11 \
+  --cpu host \
+  --cores 2 \
+  --memory 3072 \
+  --bios ovmf \
+  --machine q35 \
+  --agent 1 \
+  --scsihw virtio-scsi-pci
 
-# Configurar UEFI con formato raw
-qm set $VM_ID --machine q35 --bios ovmf
-qm set $VM_ID --efidisk0 $STORAGE:4,format=raw,efitype=4m
+# Paso 2: Añadir discos (LVM-Thin usa RAW por defecto)
+qm set 120 --efidisk0 local-lvm:4,efitype=4m  # Disco EFI 4MB
+qm set 120 --scsi0 local-lvm:60               # Disco principal 60GB (RAW implícito)
+qm set 120 --ide2 local:iso/win11.iso,media=cdrom
 
-# Disco principal (qcow2 sí funciona aquí)
-qm set $VM_ID --scsi0 local-lvm:60,format=raw
+# Paso 3: Configurar red y video
+qm set 120 --net0 virtio,bridge=vmbr0
+qm set 120 --vga qxl,memory=16
+qm set 120 --serial0 socket
+
+# Paso 4: Configurar arranque y identificadores
+qm set 120 --boot order=ide2
+qm set 120 --smbios1 uuid=e4528bf5-b00d-42f1-80c4-9b477248ddec
+qm set 120 --vmgenid e19068fe-0634-4f7e-8bc3-e714e82b856e
 
 # montamos las ISOs en nuestros CD-rom 😂  
 qm set 120 --ide2 local:iso/win11.iso,media=cdrom
-qm set 120 --ide3 local:iso/virtio-win.iso,media=cdrom
+# esperar ---- qm set 120 --ide3 local:iso/virtio-win.iso,media=cdrom
+
 
 # configurar desde la interfaz web:
 Ve a la VM 120 en Proxmox web
@@ -96,6 +111,9 @@ Click en "Ok"
 
 # -------vamos por aqui ---------
 Inicia la VM con esta configuración.
+Ve a console y abre spice , si te salen una linea de comandos, pon reset y cuando vuelva a arrancar te saldrá que si quieres iniciar desde CD pulses intro, dale y empezamos a instalar windows 11
+
+
 Instala Windows 11 desde el primer ISO.
 Cuando Windows pida drivers de almacenamiento, monta el ISO de VirtIO (tercera opción) sin reiniciar y selecciona la carpeta de drivers adecuada.
 Una vez finalizada la instalación, apaga la VM, desmonta el ISO de Windows 11 (o deshabilítalo en el orden de arranque) y reinicia para que arranque desde el disco duro.

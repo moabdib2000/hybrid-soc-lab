@@ -105,13 +105,14 @@ qm set 120 --ide2 local:iso/win11.iso,media=cdrom
 Ve a la VM 120 en Proxmox web
 Click en "Options"
 Click en "Boot Order"
-Click "Edit" movemos el orden pulsando en las 3 rallitas, ponemos primero CD, y luego SCSI, y lo ponemos en "enabled"
+Click "Edit" movemos el orden pulsando en las 3 rallitas, ponemos primero CD, y luego SCSI, y lo ponemos en "enabled" ambas
 Click en "Ok"
 
 
 # -------vamos por aqui ---------
-Inicia la VM con esta configuración.
-Ve a console y abre spice , si te salen una linea de comandos, pon reset y cuando vuelva a arrancar te saldrá que si quieres iniciar desde CD pulses intro, dale y empezamos a instalar windows 11
+Inicia la VM con esta configuración. - pulsamos boton derecho START
+
+Ve a console y abre no , si te salen una linea de comandos, pon reset y cuando vuelva a arrancar te saldrá que si quieres iniciar desde CD pulses intro, dale y empezamos a instalar windows 11
 
 
 Instala Windows 11 desde el primer ISO.

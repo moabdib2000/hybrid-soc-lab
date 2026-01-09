@@ -106,19 +106,19 @@ El valor de este proyecto no es la complejidad técnica, sino comprender el fluj
 ### Fases del proyecto
 El laboratorio se construye progresivamente, fase por fase.
 
-**Fase 1** ✅ Completed
+**Fase 1** ✅ Completado
 **Preparación del entorno PROXMOX como plataforma de virtualización** 
 - Instalación y configuración básica de Proxmox
 - Configuración de red
 - Creación de máquinas virtuales base
 
-**Fase 2** ✅ Completed  
+**Fase 2** ✅ Completado 
 **Wazuh** 
 - Para la observación de logs y alertas generadas por Wazuh
 - Plataforma SIEM / XDR  
 - Centraliza logs y genera alertas de seguridad
 
-**Fase 3** 🟡 In progress
+**Fase 3** 🟡 In progreso
 **Windows como Endpoint**  
 - Implementación de un endpoint Windows
 - Simulación de comportamiento relacionado con phishing

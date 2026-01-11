@@ -109,12 +109,18 @@ Click "Edit" movemos el orden pulsando en las 3 rallitas, ponemos primero CD, y 
 Click en "Ok"
 
 
-# -------vamos por aqui ---------
+# -------_2026-01-11_---------
 Inicia la VM con esta configuración. - pulsamos boton derecho START
 
-Ve a console y abre no , si te salen una linea de comandos, pon reset y cuando vuelva a arrancar te saldrá que si quieres iniciar desde CD pulses intro, dale y empezamos a instalar windows 11
+Ve a >console y abre noVNC , si te salen una linea de comandos (a mi me salió como esperando un comando), pon reset y cuando vuelva a arrancar te saldrá que si quieres iniciar desde CD pulses intro en una cuenta atrás, dale y empezamos a instalar windows 11
+
+Elegimos el idioma y le damos a siguiente. 
+
+Por cierto, es mas comodo trabajar desde una ventana dedicada, >console > noVNC
+
+![pantalla en proxmox](./images/ventana noVNC proxmox.jpg)
 
 
-Instala Windows 11 desde el primer ISO.
-Cuando Windows pida drivers de almacenamiento, monta el ISO de VirtIO (tercera opción) sin reiniciar y selecciona la carpeta de drivers adecuada.
-Una vez finalizada la instalación, apaga la VM, desmonta el ISO de Windows 11 (o deshabilítalo en el orden de arranque) y reinicia para que arranque desde el disco duro.
+que con la pantallita de >console que hay en proxmox en el listado de summary de la maquina, al ser una pantalla muy pequeña podemos perdernos informacion, incluso no pulsarla correctamente..... pero está muy bien esa pantalla si luego tenemos un linux corriendo y queremos echar un vistazo rápido ... 
+
+![pantalla en proxmox](./images/pantalla en proxmox.jpg)

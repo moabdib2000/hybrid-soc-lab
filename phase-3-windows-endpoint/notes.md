@@ -1,4 +1,4 @@
-# Fase 0.5: Endpoint Windows y escenarios de phishing
+# Fase 3: Endpoint Windows y escenarios de phishing
 
 ## Objetivo
 Crear el endpoint corporativo que simulará el puesto de trabajo de un usuario normal.  
@@ -119,7 +119,9 @@ Elegimos el idioma y le damos a siguiente.
 Por cierto, es mas comodo trabajar desde una ventana dedicada, >console > noVNC
 
 ![pantalla en proxmox](./images/ventana-noVNC-proxmox.jpg)
-
+<a href="./images/ventana-noVNC-proxmox.jpg" target="_blank">
+  <img src="./images/ventana-noVNC-proxmox.jpg" alt="Ventana noVNC Proxmox" width="600">
+</a>
 
 que con la pantallita de >console que hay en proxmox en el listado de summary de la maquina, al ser una pantalla muy pequeña podemos perdernos informacion, incluso no pulsarla correctamente..... pero está muy bien esa pantalla si luego tenemos un linux corriendo y queremos echar un vistazo rápido ... 
 

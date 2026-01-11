@@ -118,9 +118,9 @@ Elegimos el idioma y le damos a siguiente.
 
 Por cierto, es mas comodo trabajar desde una ventana dedicada, >console > noVNC
 
-![pantalla en proxmox](./images/ventana noVNC proxmox.jpg)
+![pantalla en proxmox](./images/ventana-noVNC-proxmox.jpg)
 
 
 que con la pantallita de >console que hay en proxmox en el listado de summary de la maquina, al ser una pantalla muy pequeña podemos perdernos informacion, incluso no pulsarla correctamente..... pero está muy bien esa pantalla si luego tenemos un linux corriendo y queremos echar un vistazo rápido ... 
 
-![pantalla en proxmox](./images/pantalla en proxmox.jpg)
+![pantalla en proxmox](./images/pantalla-en-proxmox.jpg)

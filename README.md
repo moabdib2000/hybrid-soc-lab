@@ -138,6 +138,14 @@ El laboratorio se construye progresivamente, fase por fase.
 - Se utiliza para simular el comportamiento de adversarios  
 - Enfocado en la validación de detecciones, no en la explotación
 
+**OPCIONAL Fase 6**
+**Instalazión de Zammad para gestión de tickets**
+- Open source, auto-alojado
+- Ligero (2GB RAM suficiente)
+- Interfaz moderna y fácil
+- Flujos de trabajo para SOC
+- Integración vía webhook con Wazuh
+
 **OPCIONAL / PLANIFICADO**
 - Instalación de DFIR-IRIS usando Docker
 - Creación y seguimiento de casos de seguridad

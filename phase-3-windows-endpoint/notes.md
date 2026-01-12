@@ -124,3 +124,33 @@ Por cierto, es mas comodo trabajar desde una ventana dedicada, >console > noVNC
 que con la pantallita de >console que hay en proxmox en el listado de summary de la maquina, al ser una pantalla muy pequeña podemos perdernos informacion, incluso no pulsarla correctamente..... pero está muy bien esa pantalla si luego tenemos un linux corriendo y queremos echar un vistazo rápido ... 
 
 ![pantalla en proxmox](./images/pantalla-en-proxmox.jpg)
+
+## empezamos con el primer fallo, no quiere instalarse por falta de recursos .... 
+
+revisamos en proxmox los recursos de windows y les ponemos los siguientes 
+
+VM → Hardware → Memory
+estaba en 3 gb , le metemos 4 gb (4096 Mb)
+
+Hardware → Add → TPM State → TPM Storage → local-lvm → version v2.0  
+
+Volvemos a reiniciar la VM , crucemos los dedos ... 
+Vale, arranca y pasamos a la licencia, ok 
+Pasamos a la particion, no aparece ningun disco disponible, estupendo .... eso es que hay que instalar el famosos virtio-win.iso 
+
+VM → Hardware → Add → CD/DVD Drive
+  Storage: local
+  ISO image: virtio-win.iso
+
+Volvemos a resetear. Pasamos a la particion, cargar controlador - cd virtio-win.iso - vioscsi\w11\amd64
+y nos sale el controlador !!!! :D bien
+siguiente, lo seleccionamos e instalar, nos sale por fin el disco duro reservado en la instalacion, lo seleccionamos , y seguimos con la instalacion ..... 
+
+esto marcha !!! 
+![Instalando_por_fin](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/6.jpg)
+
+problemas en la instalacion de red, no pasa nada,
+volvemos a instalar los controladores desde el CD virtio-win.iso
+
+
+

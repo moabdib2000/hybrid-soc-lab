@@ -11,7 +11,7 @@ Además, se instalará el agente Wazuh para que envíe logs al futuro Wazuh Mana
 - **ISO usada**: Windows 11 Enterprise Evaluation (versión 24H2 o la disponible en diciembre 2025)
 - **Recursos asignados**:
   - vCPU: 2 núcleos
-  - RAM: 3072 MB (3 GB)
+  - RAM: 3072 MB (3 GB) <----- es mejor 4gb , luego da problemas , no arranca la iso por falta de recursos !!!
   - Disco: 60 GB (VirtIO SCSI, thin provision)
   - Red: VirtIO, puente vmbr0
 - **Opciones especiales**:
@@ -24,7 +24,7 @@ Además, se instalará el agente Wazuh para que envíe logs al futuro Wazuh Mana
 - Proceso estándar de instalación desde ISO.
 - Idioma y región: Español.
 - Particionado automático del disco.
-- Cuenta local creada: `usuario` (contraseña simple para lab).
+- Cuenta local creada: `labadmin` (contraseña simple para lab).
 - Desactivadas la mayoría de opciones de telemetría y privacidad.
 - Windows actualizado completamente tras la instalación.
 
@@ -44,10 +44,10 @@ Además, se instalará el agente Wazuh para que envíe logs al futuro Wazuh Mana
 
 
   -----------------------------------------------
-# 1. Crear directorio de ISOs si no existe
+## 1. Crear directorio de ISOs si no existe (esto lo hacemos en la shell de proxmox)
 mkdir -p /var/lib/vz/template/iso
 
-# 2. Descargar Windows 11 Enterprise Evaluation (24H2) desde Microsoft
+## 2. Descargar Windows 11 Enterprise Evaluation (24H2) desde Microsoft
 cd /var/lib/vz/template/iso
 
 vamos a https://www.microsoft.com/en-us/evalcenter/download-windows-11-enterprise
@@ -66,10 +66,10 @@ URL: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-vir
 Nombre: virtio-win.iso
 Click "Download"
 
-# vale ahora vamos a preparar el VM, en el shell de promox metemos esto, se puede hacer en el modo grafico de proxmox, pero por aqui vamos a tardar menos 
+## vale ahora vamos a preparar el VM, en el shell de promox metemos esto, se puede hacer en el modo grafico de proxmox, pero por aqui vamos a tardar menos 
 
 
-# Paso 1: Crear VM con configuración base
+## Paso 1: Crear VM con configuración base
 qm create 120 \
   --name "win11-endpoint" \
   --ostype win11 \
@@ -81,27 +81,27 @@ qm create 120 \
   --agent 1 \
   --scsihw virtio-scsi-pci
 
-# Paso 2: Añadir discos (LVM-Thin usa RAW por defecto)
+## Paso 2: Añadir discos (LVM-Thin usa RAW por defecto)
 qm set 120 --efidisk0 local-lvm:4,efitype=4m  # Disco EFI 4MB
 qm set 120 --scsi0 local-lvm:60               # Disco principal 60GB (RAW implícito)
 qm set 120 --ide2 local:iso/win11.iso,media=cdrom
 
-# Paso 3: Configurar red y video
+## Paso 3: Configurar red y video
 qm set 120 --net0 virtio,bridge=vmbr0
 qm set 120 --vga qxl,memory=16
 qm set 120 --serial0 socket
 
-# Paso 4: Configurar arranque y identificadores
+## Paso 4: Configurar arranque y identificadores
 qm set 120 --boot order=ide2
 qm set 120 --smbios1 uuid=e4528bf5-b00d-42f1-80c4-9b477248ddec
 qm set 120 --vmgenid e19068fe-0634-4f7e-8bc3-e714e82b856e
 
-# montamos las ISOs en nuestros CD-rom 😂  
+## montamos las ISOs en nuestros CD-rom 😂  
 qm set 120 --ide2 local:iso/win11.iso,media=cdrom
-# esperar ---- qm set 120 --ide3 local:iso/virtio-win.iso,media=cdrom
+## esperar ---- qm set 120 --ide3 local:iso/virtio-win.iso,media=cdrom
 
 
-# configurar desde la interfaz web:
+## configurar desde la interfaz web:
 Ve a la VM 120 en Proxmox web
 Click en "Options"
 Click en "Boot Order"
@@ -109,7 +109,7 @@ Click "Edit" movemos el orden pulsando en las 3 rallitas, ponemos primero CD, y 
 Click en "Ok"
 
 
-# -------_2026-01-11_---------
+## -------_2026-01-11_---------
 Inicia la VM con esta configuración. - pulsamos boton derecho START
 
 Ve a >console y abre noVNC , si te salen una linea de comandos (a mi me salió como esperando un comando), pon reset y cuando vuelva a arrancar te saldrá que si quieres iniciar desde CD pulses intro en una cuenta atrás, dale y empezamos a instalar windows 11
@@ -125,7 +125,7 @@ que con la pantallita de >console que hay en proxmox en el listado de summary de
 
 ![pantalla en proxmox](./images/pantalla-en-proxmox.jpg)
 
-## empezamos con el primer fallo, no quiere instalarse por falta de recursos .... 
+## empezamos con el primer problemilla, no quiere instalarse por falta de recursos .... 
 
 revisamos en proxmox los recursos de windows y les ponemos los siguientes 
 
@@ -149,8 +149,22 @@ siguiente, lo seleccionamos e instalar, nos sale por fin el disco duro reservado
 esto marcha !!! 
 ![Instalando_por_fin](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/6.jpg)
 
-problemas en la instalacion de red, no pasa nada,
+## problemas en la instalacion de red, no pasa nada,
 volvemos a instalar los controladores desde el CD virtio-win.iso
 
+CD Drive → NetKVM → w11 → amd64 → seleecionar carpeta
+dejamos que pase un rato y nos sale RED CONECTADO .... a mi me ha tardado un minutillo, decia que no y que no, pero él solo ha detectado ...
+seguimos 
 
+resetea, actualiza, y entra en la configuracion de red....
 
+nos pide iniciar sesion en microsoft
+Shift + F10
+## creamos usuario "labadmin" y password la que queramos, ponemos esto en la consola ...
+net user labadmin password /add
+net localgroup Administradores labadmin /add
+OOBE\BYPASSNRO <---- hacemos bypass de la peticion del usuario .... 
+
+ok todo correcto ... reinicia
+
+## todavia da fallos en el arranque ... solucionar 

@@ -1,6 +1,6 @@
 # Fase 3: Endpoint Windows y escenarios de phishing
 
-## Objetivo
+## Objetivo [#3](https://github.com/moabdib2000/hybrid-soc-lab/issues/3)
 Crear el endpoint corporativo que simulará el puesto de trabajo de un usuario normal.  
 Este será el objetivo principal de las simulaciones de phishing y otras actividades sospechosas.  
 Además, se instalará el agente Wazuh para que envíe logs al futuro Wazuh Manager.
@@ -149,22 +149,51 @@ siguiente, lo seleccionamos e instalar, nos sale por fin el disco duro reservado
 esto marcha !!! 
 ![Instalando_por_fin](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/6.jpg)
 
+
+Una vez que llega al 83% resetea, ahí ya NO le damos a cargar el CD, que siga la instalación
+
 ## problemas en la instalacion de red, no pasa nada,
-volvemos a instalar los controladores desde el CD virtio-win.iso
+# ponemos NO TENGO INTERNET
+### ponemos el nombre de usuario , password , etc etc , y respondemos las 100 preguntas siguientes :D 
 
-CD Drive → NetKVM → w11 → amd64 → seleecionar carpeta
-dejamos que pase un rato y nos sale RED CONECTADO .... a mi me ha tardado un minutillo, decia que no y que no, pero él solo ha detectado ...
-seguimos 
+## ahora la configuración de red dentro de la virtualización
+Ve al explorador de archivos → Unidad de CD de VirtIO (D: o E:)
+Ejecuta: virtio-win-gt-x64.msi → siguiente → siguiente .. etc 
+por defecto instala todos los drivers, desde el raton, memoria, y red para que funcione bien la virtualización
+Reinicia la VM , mejor desde w11 - boton windows - reiniciar
 
-resetea, actualiza, y entra en la configuracion de red....
+Para trabajar más comodamente en la terminal de w11, activamos esto en la VM noVNC, para que el ratón no se nos líe el de proxmox con el de w11
+![configuramos el raton de la VM](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/8.jpg)
 
-nos pide iniciar sesion en microsoft
-Shift + F10
-## creamos usuario "labadmin" y password la que queramos, ponemos esto en la consola ...
-net user labadmin password /add
-net localgroup Administradores labadmin /add
-OOBE\BYPASSNRO <---- hacemos bypass de la peticion del usuario .... 
 
-ok todo correcto ... reinicia
+![Red por ethernet conectada !!!](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/7.jpg)
 
-## todavia da fallos en el arranque ... solucionar 
+Cambiamos la configuración de red - activamops IPv4
+Usar las siguientes direcciones
+  Dirección IP: 192.168.1.120
+  Máscara de subred: 255.255.255.0
+  Puerta de enlace predeterminada: 192.168.1.1
+  Servidor DNS preferido: 192.168.1.1
+  Servidor DNS alternativo: 8.8.8.8
+
+Vamos a abrir la terminal y hacemos un ping a ver ... 
+Tecla windows - y pulsamos powershell
+> ipconfig
+todo correcto
+
+> ping 8.8.8.8
+todo ok 
+> ping google.com
+todo ok, aqui vemos que se reseuelven las DNSs
+
+## ultimos pasos - desmontamos el cd de arranque y VirtIO
+en el shell de proxmox : 
+### aqui vemos la configuracion para localizar los ideX
+
+> qm config 120 
+...
+ide0: local:iso/virtio-win.iso,media=cdrom,size=771138K
+ide2: local:iso/win11.iso,media=cdrom,size=6929508K
+...
+> qm set 120 --ide0 none
+> qm set 120 --ide2 none

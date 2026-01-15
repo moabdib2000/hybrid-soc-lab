@@ -123,7 +123,7 @@ Por cierto, es mas comodo trabajar desde una ventana dedicada, >console > noVNC
 
 que con la pantallita de >console que hay en proxmox en el listado de summary de la maquina, al ser una pantalla muy pequeña podemos perdernos informacion, incluso no pulsarla correctamente..... pero está muy bien esa pantalla si luego tenemos un linux corriendo y queremos echar un vistazo rápido ... 
 
-![pantalla en proxmox](./images/pantalla-en-proxmox.jpg)
+![pantalla en proxmox](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/images/pantalla-en-proxmox.jpg)
 
 ## empezamos con el primer problemilla, no quiere instalarse por falta de recursos .... 
 
@@ -197,3 +197,6 @@ ide2: local:iso/win11.iso,media=cdrom,size=6929508K
 ...
 > qm set 120 --ide0 none
 > qm set 120 --ide2 none
+
+# Configurar agente wazuh - empieza lo bueno
+1.- Encendemos VM wazuh

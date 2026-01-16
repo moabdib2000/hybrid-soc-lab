@@ -35,13 +35,32 @@ pass: admin
 ya estamos dentro
 
 ## ahora vamos a coger los datos para preparar el agente de w11
-le damos a + Deploy new agent
+le damos a + Deploy new 
+![deploy agent](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/12.jpeg)
+
 seleccionamos MSI Windows
 Server address: la ip de wazuh, en mi caso 
 Assign an agent name: w11
 
 Vale ahora importante, en el paso 4 de la configuracion del nuevo agente pone , Run the following commands to download and install the agent
 pulsamos encima del chorro de comandos y verás que eso se copia
+![copiar invocacion](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/13.jpg)
+
 
 Nos vamos a nuestro win11-endpoint
 Pulsamos la tecla windows y escribimos powershell, pero le damos a abrirlo con permisos de administrador
+Pegamos el comando que nos ha preparado wazuh, se instala el AGENTE
+![descargando wazuh](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/14.jpeg)
+
+
+Y luego NET START Wazuh
+Ya lo tenemos
+![net start](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/15.jpg)
+
+Vamos a nuestra ventana de Wazuh y comprobamos los agentes, ya tenemos a nuestro w11, vamos siguiendo los pasos y vemos que ya está empezando a investigar el endpoint...
+![wazuh agentes](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/16.png)
+![agente detectado](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/17.png)
+![vamos a verlo](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/18.png)
+![detectando](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/19.jpg)
+
+Perfecto, ahora Wazuh necesita un tiempo para ir revisando al agente y va a detectar un monton de vulnerabilidades.

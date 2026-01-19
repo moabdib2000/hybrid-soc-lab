@@ -127,7 +127,7 @@ El laboratorio se construye progresivamente, fase por fase.
 - Agente Wazuh instalado para empezar a   
 - Se utiliza para escenarios de phishing y actividad sospechosa
 
-**Fase 4**
+**Fase 4** ✅ Completado
 **Kali**
 - Configuracion de Kali Linux
 - Se utiliza únicamente para simulación controlada y validación de detección.

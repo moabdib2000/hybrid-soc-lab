@@ -156,74 +156,97 @@ Una vez que llega al 83% resetea, ahí ya NO le damos a cargar el CD, que siga l
 
 ## ahora la configuración de red dentro de la virtualización
 Ve al explorador de archivos → Unidad de CD de VirtIO (D: o E:)
+
 Ejecuta: virtio-win-gt-x64.msi → siguiente → siguiente .. etc 
 por defecto instala todos los drivers, desde el raton, memoria, y red para que funcione bien la virtualización
+
 Reinicia la VM , mejor desde w11 - boton windows - reiniciar
 
-Para trabajar más comodamente en la terminal de w11, activamos esto en la VM noVNC, para que el ratón no se nos líe el de proxmox con el de w11
-![configuramos el raton de la VM](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/8.jpg)
+Para trabajar más comodamente en la terminal de w11, activamos esto en la VM noVNC, para que el ratón no se nos líe el de proxmox con el de w11  
+
+![configuramos el raton de la VM](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/8.jpg)  
 
 
-![Red por ethernet conectada !!!](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/7.jpg)
+![Red por ethernet conectada !!!](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-3-windows-endpoint/images/7.jpg)  
 
-Cambiamos la configuración de red - activamops IPv4
-Usar las siguientes direcciones
-  Dirección IP: 192.168.1.120
-  Máscara de subred: 255.255.255.0
-  Puerta de enlace predeterminada: 192.168.1.1
-  Servidor DNS preferido: 192.168.1.1
-  Servidor DNS alternativo: 8.8.8.8
+Cambiamos la configuración de red - activamops IPv4  
+Usar las siguientes direcciones:   
+
+  `Dirección IP: 192.168.1.120`
+  
+  `Máscara de subred: 255.255.255.0`
+  
+  `Puerta de enlace predeterminada: 192.168.1.1`
+  
+  `Servidor DNS preferido: 192.168.1.1`
+  
+  `Servidor DNS alternativo: 8.8.8.8`
 
 Vamos a abrir la terminal y hacemos un ping a ver ... 
 Tecla windows - y pulsamos powershell
 > ipconfig
-todo correcto
+vemos que todo correcto
 
-> ping 8.8.8.8
-todo ok 
-> ping google.com
-todo ok, aqui vemos que se reseuelven las DNSs
+> ping 8.8.8.8  
+todo ok  
 
-## ultimos pasos - desmontamos el cd de arranque y VirtIO
-en el shell de proxmox : 
+> ping google.com  
+todo ok, aqui vemos que se resuelven las DNSs
+
+## ultimos pasos - desmontamos el cd de arranque y VirtIO en el shell de proxmox : 
+
 ### aqui vemos la configuracion para localizar los ideX
 
 > qm config 120 
 ...
+
 ide0: local:iso/virtio-win.iso,media=cdrom,size=771138K
+
 ide2: local:iso/win11.iso,media=cdrom,size=6929508K
 ...
+
 > qm set 120 --ide0 none
+
 > qm set 120 --ide2 none
 
 ## ahora vamos a coger los datos para preparar el agente de w11
-vamos a nuestro wazuh que debe estar abierto en algun explorador con su http://la_ip_de_la_vm_de_wazuh , atención que es http no https
-le damos a + Deploy new 
+vamos a nuestro wazuh que debe estar abierto en algun explorador con su http://la_ip_de_la_vm_de_wazuh , atención que es http no https  
+
+le damos a + Deploy new  
+
 ![deploy agent](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/12.jpeg)
 
-seleccionamos MSI Windows
-Server address: la ip de wazuh, en mi caso 
+seleccionamos MSI Windows  
+Server address: la ip de wazuh, en mi caso  
 Assign an agent name: w11
 
-Vale ahora importante, en el paso 4 de la configuracion del nuevo agente pone , Run the following commands to download and install the agent
+Vale ahora importante, en el paso 4 de la configuracion del nuevo agente pone , Run the following commands to download and install the agent  
+
 pulsamos encima del chorro de comandos y verás que eso se copia
+
 ![copiar invocacion](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/13.jpg)
 
 
-Nos vamos a nuestro win11-endpoint
-Pulsamos la tecla windows y escribimos powershell, pero le damos a abrirlo con permisos de administrador
-Pegamos el comando que nos ha preparado wazuh, se instala el AGENTE
+Nos vamos a nuestro win11-endpoint  
+Pulsamos la tecla windows y escribimos powershell, pero le damos a abrirlo con permisos de administrador  
+Pegamos el comando que nos ha preparado wazuh, se instala el AGENTE  
+
 ![descargando wazuh](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/14.jpeg)
 
 
-Y luego NET START Wazuh
-Ya lo tenemos
+Y luego NET START Wazuh  
+Ya lo tenemos 
+
 ![net start](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/15.jpg)
 
-Vamos a nuestra ventana de Wazuh y comprobamos los agentes, ya tenemos a nuestro w11, vamos siguiendo los pasos y vemos que ya está empezando a investigar el endpoint...
+Vamos a nuestra ventana de Wazuh y comprobamos los agentes, ya tenemos a nuestro w11, vamos siguiendo los pasos y vemos que ya está empezando a investigar el endpoint...  
+
 ![wazuh agentes](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/16.png)
+
 ![agente detectado](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/17.png)
+
 ![vamos a verlo](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/18.png)
+
 ![detectando](https://github.com/moabdib2000/hybrid-soc-lab/blob/main/phase-2-wazuh-setup/images/19.jpg)
 
 Perfecto, ahora Wazuh necesita un tiempo para ir revisando al agente y va a detectar un monton de vulnerabilidades.

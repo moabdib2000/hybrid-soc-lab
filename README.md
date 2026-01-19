@@ -118,7 +118,7 @@ El laboratorio se construye progresivamente, fase por fase.
 - Plataforma SIEM / XDR  
 - Centraliza logs y genera alertas de seguridad
 
-**Fase 3** 🟡 In progreso
+**Fase 3** ✅ Completado 
 **Windows como Endpoint**  
 - Implementación de un endpoint Windows
 - Simulación de comportamiento relacionado con phishing

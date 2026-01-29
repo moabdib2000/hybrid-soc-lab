@@ -1,13 +1,28 @@
 # hybrid-soc-lab
 
-**Laboratorio SOC Híbrido: Phishing + Respuesta a Incidentes (Enfoque L1)**
-**Enfoque:** SOC Nivel 1: Detección de Phishing y Triaje de Incidentes
-**Qué busca este laboratorio:** Análisis de alertas, decisiones de triaje, criterios de escalamiento y documentación de incidentes.
 
 [🇬🇧 English](#english) | [🇪🇸 Español](#español)
 
 ## 🇪🇸 Español
 <a name="español"></a>
+
+**Laboratorio SOC Híbrido: Phishing + Respuesta a Incidentes (Enfoque L1)**
+**Enfoque:** SOC Nivel 1: Detección de Phishing y Triaje de Incidentes  
+**Qué busca este laboratorio:** Análisis de alertas, decisiones de triaje, criterios de escalamiento y documentación de incidentes.
+
+# ÍNDICE
+
+- [Resumen del proyecto](#resumen-del-proyecto)
+- [**Estado del proyecto**](#estado-del-proyecto)
+  - ✅ [Fase 1 Proxmox](phase-1-proxmox-setup/notes.md)  
+  - ✅ [Fase 2 Wazuh](phase-2-wazuh-setup/notes.md)  
+  - ✅ [Fase 3 Windows 11](phase-3-windows-endpoint/notes.md)   
+  - ✅ [Fase 4 Kali](phase-4-kali-setup/notes.md)  
+  - ✅ [Primer Incidente - Vulnerabilidad CVE-2023-1386](incidents/INC-001-qemu-guest-agent-cve-2023-1386/incident.md) 
+- [Enfoque del proyecto](#enfoque-del-proyecto)
+- [Fases del proyecto](#fases-del-proyecto)
+- [Descargo de responsabilidad](#descargo-de-responsabilidad)
+
 
 ### Laboratorio Híbrido SOC – Phishing y Respuesta a Incidentes (Enfocado Nivel 1)
 Tengo un Mac Mini 2016 viejo, así que he decidido usarlo como entorno de laboratorio.  
@@ -175,8 +190,14 @@ El objetivo es pensar y trabajar como un **analista SOC**, no como un atacante.
 - Notas de ejemplo o documentación estilo ticket
 
 ### Estado del proyecto
-Trabajo en progreso.  
-El laboratorio se está construyendo y documentando gradualmente.
+✅ [Fase 1 Proxmox](phase-1-proxmox-setup/notes.md)  
+✅ [Fase 2 Wazuh](phase-2-wazuh-setup/notes.md)  
+✅ [Fase 3 Windows 11](phase-3-windows-endpoint/notes.md)   
+✅ [Fase 4 Kali](phase-4-kali-setup/notes.md)  
+✅ [Primer Incidente - Vulnerabilidad CVE-2023-1386](incidents/INC-001-qemu-guest-agent-cve-2023-1386/incident.md)   
+
+
+
 
 ### Descargo de responsabilidad
 Este proyecto es solo para fines de aprendizaje y educación.  
